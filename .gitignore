@@ -1,0 +1,22 @@
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local development output
+dist/
+build/
+coverage/
+*.log
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Package-manager caches if a future build tool is added
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
