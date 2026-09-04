@@ -23,11 +23,29 @@ const topicLabels = {
   "Communication": "संचार"
 };
 function topicLabel(topic) { return topicLabels[topic] || topic; }
-const careerSteps = ["C Fundamentals", "Python Fundamentals", "Git + GitHub", "SQL + DBMS", "HTML + CSS", "JavaScript", "Flask / Django", "REST APIs", "DSA alongside", "Backend Projects", "AI APIs", "AI Projects", "Internship Prep", "Job Preparation", "B.Tech + Growth"];
+const careerSteps = ["C Basics", "Python", "Git/GitHub", "SQL", "HTML/CSS/JS Basics", "Flask/Django", "REST APIs", "DSA (alongside)", "Projects", "AI Integration", "Internship", "Job", "Experience", "B.Tech/Skill Growth"];
+const careerDetails = [
+  ["Learn logic, variables, loops, functions, and problem solving.", "Build small console programs."],
+  ["Learn Python syntax, functions, files, errors, and OOP.", "Build a CLI study or expense tracker."],
+  ["Learn commits, branches, pull requests, and README writing.", "Publish every project with clean history."],
+  ["Learn tables, SELECT, filters, joins, and CRUD.", "Design a small database and write 20 queries."],
+  ["Learn page structure, styling, DOM, and browser events.", "Build a responsive portfolio page."],
+  ["Learn routes, templates, forms, authentication, and testing.", "Build a CRUD web application."],
+  ["Learn JSON, HTTP methods, status codes, and API authentication.", "Build and test a REST API."],
+  ["Practice arrays, strings, recursion, sorting, and complexity every week.", "Solve problems alongside your development work; this step does not block projects."],
+  ["Combine frontend, backend, database, API, testing, and deployment.", "Ship 2 to 3 projects that solve real problems."],
+  ["Learn how to use AI APIs, prompts, and safety basics.", "Add one useful AI feature to a project."],
+  ["Prepare resume, GitHub, portfolio, and communication.", "Apply, network, and practice interviews weekly."],
+  ["Show your skills through projects and interview answers.", "Target entry-level roles and track applications."],
+  ["Learn from real codebases, feedback, and team work.", "Improve one measurable skill every month."],
+  ["Choose a specialization and keep your fundamentals strong.", "Grow through B.Tech and deliberate skill building."]
+];
 const careerLevels = careerSteps.map((name, index) => ({
   name,
   prerequisite: index === 0 ? "None" : careerSteps[index - 1],
-  alongside: index === 8 ? "Runs alongside development; it never blocks projects." : ""
+  learn: careerDetails[index][0],
+  output: careerDetails[index][1],
+  alongside: index === 7 ? "Runs every week alongside development." : ""
 }));
 const pythonLessons = ["What is Python?", "Variables and data types", "Input and output", "Operators", "if / else", "Loops", "Lists", "Tuples and dictionaries", "Functions", "Modules", "File handling", "Exceptions", "OOP basics", "Mini project", "Checkpoint"];
 const careerLessons = [
@@ -61,8 +79,16 @@ const questions = [
 const examAnswers = { "Differential calculus":"2x", "Integral calculus":"x²/2+c", "Matrices":"row", "Coordinate geometry":"0,0", "Atomic structure":"protons", "Chemical bonding":"covalent", "Water technology":"calcium magnesium", "Corrosion":"rusting", "Units and dimensions":"newton", "Motion":"direction", "Work and energy":"joule", "Electricity":"ampere", "Grammar":"writes", "Vocabulary":"glad", "Writing formats":"subject", "Communication":"feedback" };
 const defaultState = { view: "home", xp: 0, checked: [], careerDone: 0, completedLessons: [], revision: [], examTopics: {}, settings: { language: "Hinglish", dailyTime: "2 hours", goal: "Python Backend Developer", examDate: "", sound: false }, stats: { solved: 0, correct: 0, weak: [], practiceMinutes: 0 }, projectMilestones: 0, subject: null, topic: null };
 const saved = localStorage.getItem("studyOSState");
-const parsedState = saved ? JSON.parse(saved) : null;
+let parsedState = null;
+try { parsedState = saved ? JSON.parse(saved) : null; } catch (_) { localStorage.removeItem("studyOSState"); }
 const state = parsedState ? { ...defaultState, ...parsedState, settings: { ...defaultState.settings, ...(parsedState.settings || {}) }, stats: { ...defaultState.stats, ...(parsedState.stats || {}) } } : structuredClone(defaultState);
+if (state.careerProgressVersion !== 2) {
+  state.careerDone = 0;
+  state.completedLessons = [];
+  state.roadmapLevel = 0;
+  state.careerProgressVersion = 2;
+  save();
+}
 function save() { localStorage.setItem("studyOSState", JSON.stringify(state)); }
 function topicKey(subject, topic) { return `${subject}::${topic}`; }
 function topicStatus(subject, topic) { return state.examTopics?.[topicKey(subject, topic)] || { learned:false, practiced:false, tested:false }; }
@@ -80,8 +106,12 @@ function renderExamTopic(subjectName, topic) {
 function progressBar(value) { return `<div class="progress-track"><i style="width:${value}%"></i></div>`; }
 function layout(title, subtitle, body, action = "") { return `<div class="page-head"><div><p class="eyebrow">// ${title.toUpperCase()}</p><h1>${title}</h1><p>${subtitle}</p></div>${action}</div>${body}`; }
 function youtube(query) { return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`; }
+function careerVideoQuery(step) { const queries = { "C Basics": "C programming basics for beginners Hindi", Python: "Python programming for beginners Hindi", "Git/GitHub": "Git and GitHub for beginners Hindi", SQL: "SQL database basics for beginners Hindi", "HTML/CSS/JS Basics": "HTML CSS JavaScript basics for beginners Hindi", "Flask/Django": "Flask Django Python beginner Hindi", "REST APIs": "REST API Python Flask beginner Hindi", "DSA (alongside)": "DSA for beginners Python Hindi", Projects: "Python backend projects for beginners Hindi", "AI Integration": "AI API integration Python beginner Hindi" }; return queries[step] || `${step} career roadmap Hindi`; }
 const videoResources = {
-  "Differential calculus": { title: "Derivatives | Easy Trick to Learn Important Formulae", channel: "Pradeep Giri Academy", duration: "13:20", url: "https://www.youtube.com/watch?v=-296435dMfk" }
+  "Differential calculus": { title: "Derivatives | Easy Trick to Learn Important Formulae", chapter: "Differential calculus", channel: "Pradeep Giri Academy", duration: "13:20", url: "https://www.youtube.com/watch?v=-296435dMfk" },
+  "Atomic structure": { title: "Applied Chemistry | Atomic Structure", chapter: "Atomic structure", channel: "Semester Point - Anurag Sir", duration: "1:19:00", url: "https://www.youtube.com/watch?v=3Nx8xWDTnAk" },
+  "Motion": { title: "BTEUP Applied Physics 1 | Force & Motion", chapter: "Motion", channel: "Raceva Academy", duration: "57:00", url: "https://www.youtube.com/watch?v=RxvhcvHlKLc" },
+  "Grammar": { title: "Communication Skill in English | Lecture 1", chapter: "Grammar", channel: "Gtech poly", duration: "15:28", url: "https://www.youtube.com/watch?v=frE5q5YXGxM" }
 };
 function enhanceExamResources() {
   return;
@@ -94,6 +124,19 @@ function applyVideoResource() {
   if (!card) return;
   card.innerHTML = `<h2>VIDEO RESOURCE</h2><p><strong>${video.title}</strong><br>Channel: ${video.channel}<br>Duration: ${video.duration}<br>One focused Hindi diploma lecture, not a playlist.</p><a class="btn secondary" href="${video.url}" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a><h2 style="margin-top:20px">PRACTICE</h2><p>Write one definition, recall the key point, and solve one example before recording practice.</p><button class="btn secondary" data-action="exam-practice">MARK PRACTICED</button>`;
 }
+function applySubjectVideoResource() {
+  if (!state.subject || state.topic) return;
+  const video = subjects.find(item => item.name === state.subject)?.topics.map(topic => videoResources[topic]).find(Boolean);
+  if (!video) return;
+  const heading = [...document.querySelectorAll("#content h2")].find(item => item.textContent === "TOPIC LIST" || item.textContent === "1ST SEMESTER TOPICS");
+  const section = heading?.closest("section");
+  if (!section || section.previousElementSibling?.dataset.videoCard) return;
+  const card = document.createElement("section");
+  card.className = "card exam-video-card";
+  card.dataset.videoCard = "true";
+  card.innerHTML = `<div class="card-title"><h2>BEST SHORT VIDEO</h2><span class="tag">ONE VIDEO</span></div><p><strong>${video.title}</strong><br>Chapter: ${video.chapter}<br>Channel: ${video.channel}<br>Duration: ${video.duration}</p><a class="btn secondary" href="${video.url}" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a>`;
+  section.parentElement.insertBefore(card, section);
+}
 function renderHome() {
   const done = state.checked.length;
   const next = nextExamMission();
@@ -101,7 +144,7 @@ function renderHome() {
   return layout("Learning command center", "One clear next step, every day. Your missions remain separate so focus stays sharp.", `
     <section class="card hero"><p class="eyebrow">SYSTEM STATUS: ONLINE</p><div class="big-status">WHAT SHOULD I STUDY NEXT?</div><p><span class="accent">RECOMMENDED:</span> ${next.subject} // ${next.topic}</p><div class="hero-actions"><button class="btn" data-action="continue">CONTINUE LEARNING →</button><button class="btn secondary" data-view="planner">BUILD TODAY'S PLAN</button></div></section>
     <div class="grid grid-3" style="margin-bottom:16px"><div class="card"><div class="stat">${state.settings.dailyTime === "2 hours" ? "02:00" : state.settings.dailyTime.replace(" hours", ":00").replace(" hour", ":00")}</div><div class="stat-label">TIME TARGET TODAY</div></div><div class="card"><div class="stat">${done} / 5</div><div class="stat-label">MISSION ITEMS DONE</div></div><div class="card"><div class="stat">${state.xp.toLocaleString()}</div><div class="stat-label">TOTAL XP</div></div></div>
-    <div class="grid grid-2" style="margin-bottom:16px"><section class="card mission-card exam"><div class="mission-icon">🎓</div><h2>BACK EXAMS</h2><p>Four subjects // ${examAverage}% evidence-based progress</p><button class="btn secondary" data-view="exams">OPEN EXAM MISSION</button></section><section class="card mission-card career"><div class="mission-icon">⌘</div><h2>CAREER DEVELOPMENT</h2><p>15 levels // Python backend track active</p><button class="btn secondary" data-view="career">OPEN CAREER MISSION</button></section></div>
+    <div class="grid grid-2" style="margin-bottom:16px"><section class="card mission-card exam"><div class="mission-icon">🎓</div><h2>BACK EXAMS</h2><p>Four subjects // ${examAverage}% evidence-based progress</p><button class="btn secondary" data-view="exams">OPEN EXAM MISSION</button></section><section class="card mission-card career"><div class="mission-icon">⌘</div><h2>CAREER DEVELOPMENT</h2><p>14 levels // practical Python developer track active</p><button class="btn secondary" data-view="career">OPEN CAREER MISSION</button></section></div>
     <div class="split"><section class="card"><div class="card-title"><h2>TODAY'S MISSION</h2><span class="tag">${done} / 5 DONE</span></div><ol class="checklist mission-sequence">${["Physics — Laws & Concepts", "Mathematics — Integration", "Python — Functions", "20-minute revision", "Daily quiz"].map((x, i) => `<li><span class="mission-number">${String(i + 1).padStart(2, "0")}</span><input type="checkbox" data-check="${i}" ${state.checked.includes(i) ? "checked" : ""}> <span>${x}</span></li>`).join("")}</ol></section><section class="card"><div class="card-title"><h2>QUICK SIGNALS</h2><span class="tag warn">LIVE</span></div><p>Next revision due: <strong class="accent">Physics // Motion</strong></p><p>Weak area: <strong class="exam-color">Mathematics // Integration</strong></p><p>Upcoming: <strong>${state.settings.examDate || "Back exam date not set"}</strong></p></section></div>`);
 }
 function subjectDetail(name) {
@@ -116,8 +159,10 @@ function renderCareer() {
   if (state.careerLesson !== undefined) return renderCareerLesson(state.careerLesson);
   const lessons = careerLessons.map((lesson, i) => `<button class="lesson ${state.completedLessons.includes(i) ? "done" : ""}" data-action="lesson" data-lesson="${i}"><span class="num">${String(i + 1).padStart(2, "0")}</span>${lesson.title}<span class="priority ${state.completedLessons.includes(i) ? "low" : "medium"}">${state.completedLessons.includes(i) ? "LEARNED" : i > 0 && !state.completedLessons.includes(i - 1) ? "LOCKED" : "OPEN"}</span></button>`).join("");
   const projectCards = careerProjects.map((project, i) => `<article class="card"><span class="tag ${i === 2 ? "warn" : ""}">${project.difficulty}</span><h3 style="margin-top:16px">${project.name}</h3><p>${project.purpose}</p><p><strong>Skills:</strong> ${project.skills}</p><button class="btn secondary" data-action="project" data-project="${i}">OPEN BRIEF</button></article>`).join("");
+  const roadmapFocusIndex = Number.isInteger(state.roadmapLevel) ? state.roadmapLevel : state.careerDone;
+  const roadmapFocus = careerLevels[Math.min(roadmapFocusIndex, careerLevels.length - 1)];
   return layout("Career development", "CAREER SYSTEM ONLINE // Foundation → Python → Backend → Projects → AI → Internship.", `<section class="card hero"><p class="eyebrow">CURRENT TARGET</p><div class="big-status">PYTHON BACKEND + AI</div><p><span class="accent">NEXT STEP:</span> ${state.completedLessons.length < 9 ? careerLessons[state.completedLessons.length].title : "Complete the Python checkpoint"}</p><div class="hero-actions"><button class="btn" data-action="next-career">OPEN NEXT LESSON →</button><button class="btn secondary" data-action="career-plan">BUILD CAREER PLAN</button></div></section>
-    <section class="card" style="margin-bottom:16px"><div class="card-title"><h2>ROADMAP // 15 LEVELS</h2><span class="tag">DSA RUNS ALONGSIDE DEVELOPMENT</span></div><div class="roadmap">${careerLevels.map((level, i) => `<button class="roadmap-step roadmap-button ${i < state.careerDone ? "roadmap-done" : i === state.careerDone ? "roadmap-current" : ""}" data-action="roadmap" data-level="${i}"><small>LEVEL ${String(i + 1).padStart(2, "0")}</small><h3>${level.name}</h3><p>${i < state.careerDone ? "✓ complete" : i === state.careerDone ? "● current focus" : "locked until prerequisites"}</p>${level.alongside ? `<small class="topic-note">${level.alongside}</small>` : ""}</button>`).join("")}</div></section>
+    <section class="card roadmap-panel" style="margin-bottom:16px"><div class="card-title"><div><h2>YOUR CAREER PATH</h2><p class="roadmap-intro">Read from top to bottom. DSA starts here but runs every week alongside development.</p></div><span class="tag">14 PRACTICAL STEPS</span></div><div class="roadmap">${careerLevels.map((level, i) => `<button class="roadmap-step roadmap-button ${i < state.careerDone ? "roadmap-done" : i === state.careerDone ? "roadmap-current" : ""} ${i === roadmapFocusIndex ? "roadmap-selected" : ""}" data-action="roadmap" data-level="${i}"><div class="roadmap-step-head"><span class="roadmap-number">${String(i + 1).padStart(2, "0")}</span><span class="roadmap-state">${i < state.careerDone ? "DONE" : i === state.careerDone ? "START HERE" : "NEXT"}</span></div><h3>${level.name}</h3><p class="roadmap-learn"><strong>LEARN</strong> ${level.learn}</p><p class="roadmap-output"><strong>MAKE</strong> ${level.output}</p>${level.alongside ? `<p class="topic-note">${level.alongside}</p>` : ""}</button>`).join("")}</div><div class="roadmap-focus"><span class="tag">SELECTED STEP ${String(roadmapFocusIndex + 1).padStart(2, "0")}</span><h3>${roadmapFocus.name}</h3><p><strong>First learn:</strong> ${roadmapFocus.learn}</p><p><strong>Then make:</strong> ${roadmapFocus.output}</p><a class="btn secondary" href="${youtube(careerVideoQuery(roadmapFocus.name))}" target="_blank" rel="noopener noreferrer">FIND BEGINNER VIDEO ↗</a></div></section>
     <div class="split"><section class="card"><div class="card-title"><h2>PYTHON LESSONS</h2><span class="tag">${state.completedLessons.length} / ${careerLessons.length} LEARNED</span></div><div class="lesson-list">${lessons}</div></section><section class="card"><div class="card-title"><h2>CAREER DECISION ENGINE</h2><span class="tag">ONE NEXT STEP</span></div><p>Recommendation: complete the next Python lesson before Flask. Backend frameworks depend on functions, modules, OOP, and HTTP basics.</p><div class="notice">LEARNED ≠ PRACTICED ≠ MASTERED</div><button class="btn" data-action="checkpoint" style="margin-top:18px">RUN PYTHON CHECKPOINT</button><a class="btn secondary" href="${youtube("Python backend beginner Hindi playlist")}" target="_blank" rel="noopener noreferrer" style="margin:18px 0 0 8px">SEARCH YOUTUBE ↗</a></section></div>
     <section class="card" style="margin-top:16px"><div class="card-title"><h2>PROJECT PROGRESSION</h2><span class="tag">BUILD TO PROVE</span></div><div class="grid grid-3">${projectCards}</div></section>
     <div class="grid grid-2" style="margin-top:16px"><section class="card"><div class="card-title"><h2>JOB READINESS</h2><span class="tag">NO GUARANTEES</span></div>${[["Python",40],["SQL",20],["Backend",10],["Projects",5],["DSA",15],["Interview",5]].map(([n,v]) => `<div class="bar-row"><label>${n}</label>${progressBar(v)}<strong>${v}%</strong></div>`).join("")}</section><section class="card"><h2>PREREQUISITE ENGINE</h2><p>Flask requires Python basics, functions, modules, OOP, and HTTP basics. Do not jump ahead just because a framework is popular.</p><button class="btn secondary" data-action="flask-gate" style="margin-top:16px">CHECK FLASK ACCESS</button></section></div>
@@ -167,6 +212,7 @@ function render(view = state.view) {
   state.view = views[view] ? view : "home";
   document.querySelector("#content").innerHTML = state.topic ? renderExamTopic(state.subject, state.topic) : state.subject ? subjectDetail(state.subject) : views[state.view]();
   applyVideoResource();
+  applySubjectVideoResource();
   document.querySelectorAll(".nav-item").forEach(b => b.classList.toggle("active", b.dataset.view === state.view));
   bindInteractions();
   const xp = document.querySelector("#xpValue"); if (xp) xp.textContent = state.xp.toLocaleString();
@@ -191,7 +237,7 @@ function bindInteractions() {
     if (action === "continue") { const next = nextExamMission(); state.subject = next.subject; state.topic = next.topic; save(); render("exams"); toast(`Current exam lesson loaded: ${next.subject} // ${next.topic}`); }
     if (action === "next-career") { state.careerLesson = state.completedLessons.length < careerLessons.length ? state.completedLessons.length : careerLessons.length - 1; render("career"); }
     if (action === "close-lesson") { delete state.careerLesson; render("career"); }
-    if (action === "complete-lesson") { const i = Number(el.dataset.lesson); if (!state.completedLessons.includes(i)) { state.completedLessons.push(i); state.careerDone = Math.max(state.careerDone, Math.min(i + 1, careerSteps.length)); state.xp += 25; const topic = `Python // ${careerLessons[i].title}`; state.revision = [...state.revision.filter(item => item.topic !== topic), { topic, date: "DAY 1", due: ["DAY 1", "DAY 3", "DAY 7", "DAY 14"] }]; } delete state.careerLesson; save(); render("career"); toast("Lesson learned. Spaced revision scheduled."); }
+    if (action === "complete-lesson") { const i = Number(el.dataset.lesson); if (!state.completedLessons.includes(i)) { state.completedLessons.push(i); if (i === careerLessons.length - 1) state.careerDone = Math.max(state.careerDone, 2); state.xp += 25; const topic = `Python // ${careerLessons[i].title}`; state.revision = [...state.revision.filter(item => item.topic !== topic), { topic, date: "DAY 1", due: ["DAY 1", "DAY 3", "DAY 7", "DAY 14"] }]; } delete state.careerLesson; save(); render("career"); toast("Lesson learned. Spaced revision scheduled."); }
     if (action === "career-plan") { render("planner"); toast("Choose your available time for a focused career mission."); }
     if (action === "ai-gate") { toast(state.completedLessons.length >= 13 ? "AI integration gate is open." : "ACCESS DENIED: finish Python, HTTP, and backend prerequisites first."); }
     if (action === "flask-gate") { state.careerGate = true; render("career"); }
@@ -204,7 +250,7 @@ function bindInteractions() {
     if (action === "exam-practice") { const key = topicKey(state.subject, state.topic); state.examTopics[key] = { ...topicStatus(state.subject, state.topic), learned:true, practiced:true }; state.stats.practiceMinutes += 10; save(); render("exams"); toast("Practice recorded. Take the topic test next."); }
     if (action === "checkpoint") toast("Checkpoint started. Mastery requires demonstrated understanding.");
     if (action === "lesson") { const lessonIndex = Number(el.dataset.lesson); if (lessonIndex > 0 && !state.completedLessons.includes(lessonIndex - 1)) { state.careerGate = true; state.gateTarget = careerLessons[lessonIndex].title; state.gateLesson = lessonIndex - 1; render("career"); toast(`ACCESS DENIED: complete "${careerLessons[lessonIndex - 1].title}" first.`); } else { state.careerLesson = lessonIndex; render("career"); } }
-    if (action === "roadmap") { const level = Number(el.dataset.level); if (level > state.careerDone && level !== 8) { state.careerGate = true; state.gateTarget = careerLevels[level].name; delete state.gateLesson; render("career"); toast(`ACCESS DENIED: complete ${careerLevels[level].prerequisite} first.`); } else { toast(level === 8 ? "DSA unlocked alongside development. Keep building projects." : `Level ${String(level + 1).padStart(2, "0")} selected.`); } }
+    if (action === "roadmap") { const level = Number(el.dataset.level); if (level > state.careerDone && level !== 7) { state.careerGate = true; state.gateTarget = careerLevels[level].name; delete state.gateLesson; render("career"); toast(`ACCESS DENIED: complete ${careerLevels[level].prerequisite} first.`); } else { state.roadmapLevel = level; save(); render("career"); toast(level === 7 ? "DSA runs alongside development. Keep practicing weekly." : `Step ${String(level + 1).padStart(2, "0")} selected.`); } }
     if (action === "hint") document.querySelector("#hintText").textContent = questions[state.stats.solved % questions.length].hint;
     if (action === "complete-revision") { const item = state.revision.find(x => x.topic === el.dataset.topic); if (item?.due?.length > 1) { state.revision = state.revision.map(x => x.topic === el.dataset.topic ? { ...x, date:x.due[1], due:x.due.slice(1) } : x); } else { state.revision = state.revision.filter(x => x.topic !== el.dataset.topic); } state.xp += 15; state.stats.practiceMinutes += 10; save(); render("revision"); toast("Revision completed. Next recall scheduled."); }
     if (action === "revision-mode") { const plans = { "7-DAY": "Days 1–4: one exam subject block + one weak-topic practice block. Days 5–6: mixed questions. Day 7: timed test and error review. Take a 10-minute break between blocks.", "3-DAY": "Day 1: formulas and definitions. Day 2: high-priority examples and practice. Day 3: timed mock, then revise only wrong answers. Take a 10-minute break between blocks.", "1-DAY": "Formulas → definitions → important concepts → selected questions → short notes. Study in 40-minute blocks with 10-minute breaks; stop new topics before the final recall block." }; document.querySelector("#revisionModeOutput").textContent = plans[el.dataset.mode]; }
