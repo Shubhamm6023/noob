@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.StudyOS" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:colorAccent">#65F58A</item>
+        <item name="android:navigationBarColor">#070B09</item>
+        <item name="android:statusBarColor">#070B09</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

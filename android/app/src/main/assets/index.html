@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="StudyOS - BTEUP exam preparation and computer science career development dashboard">
+  <title>StudyOS // Learning Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" data-view="home" aria-label="Go to home">
+        <span class="brand-mark">&gt;_</span>
+        <span>STUDY<span class="accent">OS</span></span>
+      </button>
+      <div class="system-readout"><span class="status-dot"></span> SYSTEM ONLINE <span class="muted">|</span> <span id="clock">--:--:--</span></div>
+      <button class="icon-button" id="menuToggle" aria-label="Toggle navigation">☰</button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="profile-card">
+          <div class="avatar">CS</div>
+          <div><strong>STUDENT PROFILE</strong><small>Beginner CSE // BTEUP</small></div>
+        </div>
+        <p class="nav-label">MAIN MENU</p>
+        <nav>
+          <button class="nav-item active" data-view="home"><span>⌂</span> HOME</button>
+          <button class="nav-item" data-view="exams"><span>🎓</span> BACK EXAMS</button>
+          <button class="nav-item" data-view="career"><span>⌘</span> CAREER ROADMAP</button>
+          <button class="nav-item" data-view="tutor"><span>◈</span> AI TUTOR</button>
+          <button class="nav-item" data-view="practice"><span>✎</span> PRACTICE</button>
+          <button class="nav-item" data-view="projects"><span>🚀</span> PROJECTS</button>
+          <button class="nav-item" data-view="revision"><span>↻</span> REVISION</button>
+          <button class="nav-item" data-view="progress"><span>▥</span> PROGRESS</button>
+        </nav>
+        <div class="sidebar-footer">
+          <button class="nav-item" data-view="settings"><span>⚙</span> SETTINGS</button>
+          <div class="level-card"><span>LEVEL 04 // LEARNER</span><strong><span id="xpValue">1,420</span> XP</strong><div class="progress-track"><i style="width: 72%"></i></div></div>
+        </div>
+      </aside>
+
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
