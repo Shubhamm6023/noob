@@ -7,6 +7,7 @@ Thumbs.db
 # Local development output
 dist/
 build/
+.gradle/
 coverage/
 *.log
 

@@ -38,6 +38,13 @@ python -m http.server 8000
 
 Then open <http://localhost:8000>.
 
+## Install on Android
+
+Tagged releases include an installable, debug-signed APK named `StudyOS-<tag>.apk`.
+Download it from the GitHub release, allow installation from the source you used to download it, and open the APK to install it.
+
+To build and install locally with Android Studio, open the `android` folder and run the `app` configuration on a connected device or emulator.
+
 ## Deploy with GitHub Pages
 
 This repository includes a GitHub Actions workflow for Pages deployment.

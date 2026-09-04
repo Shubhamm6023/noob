@@ -47,6 +47,30 @@ function save() { localStorage.setItem("studyOSState", JSON.stringify(state)); }
 function progressBar(value) { return `<div class="progress-track"><i style="width:${value}%"></i></div>`; }
 function layout(title, subtitle, body, action = "") { return `<div class="page-head"><div><p class="eyebrow">// ${title.toUpperCase()}</p><h1>${title}</h1><p>${subtitle}</p></div>${action}</div>${body}`; }
 function youtube(query) { return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`; }
+function enhanceExamResources() {
+  const heading = document.querySelector("#content h1");
+  if (!heading) return;
+  if (heading.textContent === "Back exam mission") {
+    const subtitle = heading.parentElement.querySelector("p:last-child");
+    if (subtitle) subtitle.textContent = "Beginner-friendly preparation for UP Board and BTEUP first-year back exams in Hindi medium.";
+  }
+  const subject = subjects.find(item => item.name === heading.textContent);
+  if (!subject) return;
+  document.querySelectorAll("#content .lesson").forEach(row => {
+    if (row.querySelector("[data-exam-video]")) return;
+    const topic = row.querySelector("strong")?.textContent;
+    if (!topic) return;
+    const link = document.createElement("a");
+    link.className = "btn secondary";
+    link.dataset.examVideo = "true";
+    link.href = youtube(`${subject.name} ${topic} BTEUP UP Board Hindi medium lecture`);
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.title = "Open Hindi-medium video search";
+    link.textContent = "VIDEO ↗";
+    row.append(link);
+  });
+}
 function renderHome() {
   const done = state.checked.length;
   return layout("Learning command center", "One clear next step, every day. Your missions remain separate so focus stays sharp.", `
@@ -166,6 +190,7 @@ function bindInteractions() {
   const answerForm = document.querySelector("#answerForm");
   if (answerForm) answerForm.addEventListener("submit", e => { e.preventDefault(); const q = questions[state.stats.solved % questions.length]; const answer = document.querySelector("#answerInput").value.trim().toLowerCase(); const correct = answer === q.answer.toLowerCase(); state.stats.solved += 1; state.stats.correct += correct ? 1 : 0; state.stats.practiceMinutes += 5; if (!correct && !state.stats.weak.includes(q.question)) state.stats.weak.push(q.question); state.xp += correct ? 20 : 5; save(); document.querySelector("#answerResult").innerHTML = `<div class="notice" style="margin-top:15px">${correct ? "✓ CORRECT" : "✗ NOT YET"} — ${q.explanation}<br><span class="muted">${correct ? "Difficulty can increase gradually." : "Keep this concept in your revision queue before advancing."}</span></div><button class="btn secondary" data-view="practice" style="margin-top:10px">NEXT QUESTION</button>`; bindInteractions(); });
 }
+new MutationObserver(enhanceExamResources).observe(document.querySelector("#content"), { childList: true, subtree: true });
 document.querySelector("#menuToggle").addEventListener("click", () => document.querySelector("#sidebar").classList.toggle("open"));
 setInterval(() => { document.querySelector("#clock").textContent = new Date().toLocaleTimeString([], { hour12: false }); }, 1000);
 render();
