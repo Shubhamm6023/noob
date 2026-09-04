@@ -23,15 +23,15 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Build release APK
+      - name: Build installable APK
         uses: gradle/gradle-build-action@v3
         with:
           gradle-version: '8.10'
-          arguments: :app:assembleRelease
+          arguments: :app:assembleDebug
           build-root-directory: android
 
       - name: Prepare downloadable APK
-        run: cp android/app/build/outputs/apk/release/app-release-unsigned.apk StudyOS-${{ github.ref_name }}.apk
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk StudyOS-${{ github.ref_name }}.apk
 
       - name: Attach APK to GitHub Release
         uses: softprops/action-gh-release@v2
