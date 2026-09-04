@@ -13,12 +13,13 @@
 <body>
   <div class="app-shell">
     <header class="topbar">
+      <button class="icon-button menu-button" id="menuToggle" aria-label="Open navigation" aria-expanded="false">⋮</button>
       <button class="brand" data-view="home" aria-label="Go to home">
         <span class="brand-mark">&gt;_</span>
         <span>STUDY<span class="accent">OS</span></span>
       </button>
       <div class="system-readout"><span class="status-dot"></span> SYSTEM ONLINE <span class="muted">|</span> <span id="clock">--:--:--</span></div>
-      <button class="icon-button" id="menuToggle" aria-label="Toggle navigation">☰</button>
+      <button class="sound-button" id="soundToggle" aria-label="Toggle startup sound">SOUND: OFF</button>
     </header>
 
     <div class="layout">
@@ -41,12 +42,14 @@
         <div class="sidebar-footer">
           <button class="nav-item" data-view="settings"><span>⚙</span> SETTINGS</button>
           <div class="level-card"><span>LEVEL 04 // LEARNER</span><strong><span id="xpValue">1,420</span> XP</strong><div class="progress-track"><i style="width: 72%"></i></div></div>
+          <small class="owner">Build by Shubham Rao</small>
         </div>
       </aside>
 
       <main class="content" id="content"></main>
     </div>
   </div>
+  <button class="nav-backdrop" id="navBackdrop" aria-label="Close navigation"></button>
   <div class="toast" id="toast" role="status"></div>
   <script src="app.js"></script>
 </body>
