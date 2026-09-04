@@ -30,10 +30,13 @@ jobs:
           arguments: :app:assembleRelease
           build-root-directory: android
 
+      - name: Prepare downloadable APK
+        run: cp android/app/build/outputs/apk/release/app-release-unsigned.apk StudyOS-${{ github.ref_name }}.apk
+
       - name: Attach APK to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: android/app/build/outputs/apk/release/app-release.apk
+          files: StudyOS-${{ github.ref_name }}.apk
           tag_name: ${{ github.ref_name }}
           name: StudyOS Android ${{ github.ref_name }}
           generate_release_notes: true
