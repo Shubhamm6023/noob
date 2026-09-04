@@ -234,5 +234,5 @@ document.querySelector("#soundToggle").addEventListener("click", () => { state.s
 function updateSoundButton() { document.querySelector("#soundToggle").textContent = `SOUND: ${state.settings.sound ? "ON" : "OFF"}`; }
 function playStartupTone() { try { const AC = window.AudioContext || window.webkitAudioContext; const ctx = new AC(); const oscillator = ctx.createOscillator(); const gain = ctx.createGain(); oscillator.frequency.value = 520; gain.gain.setValueAtTime(.025, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .12); oscillator.connect(gain).connect(ctx.destination); oscillator.start(); oscillator.stop(ctx.currentTime + .12); } catch (_) {} }
 updateSoundButton();
-setInterval(() => { document.querySelector("#clock").textContent = new Date().toLocaleTimeString([], { hour12: false }); }, 1000);
+setInterval(() => { document.querySelector("#clock").textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }); }, 1000);
 render();
