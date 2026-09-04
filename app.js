@@ -80,8 +80,19 @@ function renderExamTopic(subjectName, topic) {
 function progressBar(value) { return `<div class="progress-track"><i style="width:${value}%"></i></div>`; }
 function layout(title, subtitle, body, action = "") { return `<div class="page-head"><div><p class="eyebrow">// ${title.toUpperCase()}</p><h1>${title}</h1><p>${subtitle}</p></div>${action}</div>${body}`; }
 function youtube(query) { return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`; }
+const videoResources = {
+  "Differential calculus": { title: "Derivatives | Easy Trick to Learn Important Formulae", channel: "Pradeep Giri Academy", duration: "13:20", url: "https://www.youtube.com/watch?v=-296435dMfk" }
+};
 function enhanceExamResources() {
   return;
+}
+function applyVideoResource() {
+  if (!state.topic || !videoResources[state.topic]) return;
+  const video = videoResources[state.topic];
+  const heading = [...document.querySelectorAll("#content h2")].find(item => item.textContent === "VIDEO RESOURCE");
+  const card = heading?.closest("section");
+  if (!card) return;
+  card.innerHTML = `<h2>VIDEO RESOURCE</h2><p><strong>${video.title}</strong><br>Channel: ${video.channel}<br>Duration: ${video.duration}<br>One focused Hindi diploma lecture, not a playlist.</p><a class="btn secondary" href="${video.url}" target="_blank" rel="noopener noreferrer">WATCH VIDEO ↗</a><h2 style="margin-top:20px">PRACTICE</h2><p>Write one definition, recall the key point, and solve one example before recording practice.</p><button class="btn secondary" data-action="exam-practice">MARK PRACTICED</button>`;
 }
 function renderHome() {
   const done = state.checked.length;
@@ -154,6 +165,7 @@ const views = { home: renderHome, exams: renderExams, career: renderCareer, tuto
 function render(view = state.view) {
   state.view = views[view] ? view : "home";
   document.querySelector("#content").innerHTML = state.topic ? renderExamTopic(state.subject, state.topic) : state.subject ? subjectDetail(state.subject) : views[state.view]();
+  applyVideoResource();
   document.querySelectorAll(".nav-item").forEach(b => b.classList.toggle("active", b.dataset.view === state.view));
   bindInteractions();
   const xp = document.querySelector("#xpValue"); if (xp) xp.textContent = state.xp.toLocaleString();
